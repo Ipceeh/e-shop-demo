@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="shortcut icon" href="./img/logo-small.jpg" type="image/png">
+        <link href="https://fonts.googleapis.com/css?family=PT+Sans|Ubuntu:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>easy-gift.com</title>
+    </head>
+    <body>
+     	<section class="enter-screen" id="slider">
+	        <header class="main-header">
+	        	<div class="container-main-menu">
+	        		<a href="#" class="logo-link"></a>
+	        		<a href="#" class="menu-link">продукты</a>
+	        		<a href="#" class="menu-link">о нас</a>
+	        		<a href="#search-screen" class="menu-link">выбрать подарок</a>
+	        	</div>
+	        	<div class="container-main-menu-right">
+	        		<a href="#" class="loupe"></a>
+	        		<a href="#" class="menu-link">Контакты</a>
+	        		<a href="#" class="menu-link">Вход</a>
+	        		<a href="#" class="basket">1</a>
+	        	</div>
+	        </header>
+	        <div class="slider-foto">
+	        	<transition name="fotoTrans"  mode="in-out">
+			   		<img :src="foto[currentFoto].url" alt="" class="slider-foto-foto" :key="currentFoto">
+			    </transition>
+			    <transition name="textTrans">
+				   	<p class="slider-foto-title" :key="currentFoto"  mode="out-in">{{ foto[currentFoto].title }}</p>
+				</transition>
+				<transition name="descTrans">
+					<p class="slider-foto-desc" :key="currentFoto">{{ foto[currentFoto].description }}</p>	
+				</transition>			
+			</div>
+		    <div class="menu-picker">
+		       	<i class="fa fa-circle-thin" aria-hidden="true" @click="switchFoto(0)" :class="{active: foto[0].active}"></i>
+		       	<i class="fa fa-circle-thin" aria-hidden="true" @click="switchFoto(1)" :class="{active: foto[1].active}"></i>
+		       	<i class="fa fa-circle-thin" aria-hidden="true" @click="switchFoto(2)" :class="{active: foto[2].active}"></i>
+		       	<i class="fa fa-circle-thin" aria-hidden="true" @click="switchFoto(3)" :class="{active: foto[3].active}"></i>
+		    </div>
+		<a href="#search-screen" class="scroll">
+			<i class="fa fa-angle-double-down" aria-hidden="true"></i> 
+		</a>
+			 
+		</section>
+		<section class="search-screen" id="search-screen">
+			<h1>Выбери подарок сейчас</h1>
+			<h3>Наш сервис поможет вам подобрать  правильный подарок для дорогого человека</h3>
+			<form action="" id="searchForm" class="forma">
+				<div class="question" @click="clickedGender=!clickedGender">
+					<p class="text-qustion" v-show="!clickedGender">Пол</p>
+					<div class="servise" v-show="clickedGender || pickedGender">
+						<div class="params" v-for="item in gender" @click="onClickQ1(item)" v-show="clickedGender || (pickedGender && genderPicked == item)">{{ item }}</div>
+					</div>
+					<div class="but-list">
+						<i class="fa fa-angle-down" aria-hidden="true" v-show="!clickedGender"></i>
+						<i class="fa fa-angle-up" aria-hidden="true" v-show="clickedGender"></i>
+					</div>
+				</div>
+				<span class="line-out"></span>
+
+				<div class="question" @click="clickedAge=!clickedAge">
+					<p class="text-qustion" v-show="!clickedAge">Возраст</p>
+					<div class="servise" v-show="clickedAge || pickedAge">
+						<div class="params" v-for="item in age" @click="onClickQ2(item)" v-show="clickedAge || (pickedAge && agePicked == item)">{{ item }}</div>
+					</div>
+					<div class="but-list">
+						<i class="fa fa-angle-down" aria-hidden="true" v-show="!clickedAge"></i>
+						<i class="fa fa-angle-up" aria-hidden="true" v-show="clickedAge"></i>
+					</div>
+				</div>
+				<span class="line-out"></span>
+
+				<div class="question" @click.self="clickedHobbies=!clickedHobbies">
+					<p class="text-qustion" v-show="!clickedHobbies" @click.self="clickedHobbies=!clickedHobbies">Хобби и увлечения</p>
+					<div class="servise" v-show="clickedHobbies || pickedHobbies">
+						<div class="params" v-for="item in hobbies" @click="onClickQ3(item)" v-show="clickedHobbies">{{ item }}</div>
+						<i class="fa fa-trash-o escape" aria-hidden="true" v-show="clickedHobbies" @click.self="clickedHobbies=!clickedHobbies"></i>
+					</div>
+					<div class="servise">
+						<div class="params" v-for="item in hobbiesPicked" v-show="!clickedHobbies" @click="onClickQ4(item)">{{ item }}</div>
+					</div>
+					<div class="but-list">
+						<i class="fa fa-angle-down" aria-hidden="true" v-show="!clickedHobbies"></i>
+						<i class="fa fa-angle-up" aria-hidden="true" v-show="clickedHobbies"></i>
+					</div>
+				</div>
+				<span class="line-out"></span>
+
+				<div class="question" @click="clickedOcasion=!clickedOcasion">
+					<p class="text-qustion" v-show="!clickedOcasion">Повод</p>
+					<div class="servise" v-show="clickedOcasion || pickedOcasion">
+						<div class="params" v-for="item in ocasion" @click="onClickQ5(item)" v-show="clickedOcasion || (pickedOcasion && ocasionPicked == item)">{{ item }}</div>
+					</div>
+					<div class="but-list">
+						<i class="fa fa-angle-down" aria-hidden="true" v-show="!clickedOcasion"></i>
+						<i class="fa fa-angle-up" aria-hidden="true" v-show="clickedOcasion"></i>
+					</div>
+				</div>
+				<span class="line-out"></span>
+				<a href="#rezult-screen" class="submit-but">Найти</a>
+
+			</form>
+		<transition name = bigLane>
+			<span class="big-line-out" v-show="!scrolTop"></span>
+		</transition>
+		</section>
+		<section class="rezult-screen" id="rezult-screen">
+			<h1>Ассортимент подарков</h1>
+			<h3>Здесь вы можете посмотреть существующие варианты подарков</h3>
+			<div class="rezult-area" id="rezult-area">
+				<div class="present" v-for="item in present">
+					<img :src="item.url" alt="" class="present-foto">
+					<div class="present-servise">
+						<a href="#rezult-screen" class="add-to-wish">Добавить в пожелание</a>
+						<div>
+							<div class="present-price">{{ item.price }} &#8372;</div>
+							<div class="present-name">{{ item.name }}</div>
+						</div>
+						<a href="#rezult-screen" class="present-buy">Купить</a>
+					</div>
+				</div>
+				<a href="#rezult-screen" class="menu-link show-more">Показать больше...</a>
+			</div>			
+		</section>
+		<footer class="main-footer">
+			<div class="footer-col">
+				<div>
+					<i class="fa fa-copyright footer-emb" aria-hidden="true"></i>
+					<p class="footer-text">Интернет-магазин «EasyGift» 2017</p>
+				</div>
+				<p class="footer-text">Все права защищены.</p>
+			</div>
+			<div class="footer-col">
+				<div>
+					<div class="footer-text">КОНТАКТЫ</div>
+				</div>
+				<div>
+					<div class="footer-text">krasnopolskiy.pavel@gmail.com</div>
+					<div class="footer-text">lelux.tatyana@gmail.com</div>
+				</div>
+				<div class="footer-text">(050) 751-60-97</div>
+				<div>
+					<img src="./img/g+.png" alt="" class="social">
+					<img src="./img/insta.png" alt="" class="social">
+					<img src="./img/viber.png" alt="" class="social">
+					<img src="./img/fb.png" alt="" class="social">
+				</div>
+			</div>
+			<div class="footer-col reg">
+				<div class="footer-text">МОЙ ПРОФИЛЬ</div>
+				<div class="footer-text">Регистрация</div>
+				<div class="footer-text">Вход</div>
+			</div>			
+		</footer>
+		
+        <script type="text/javascript" src="js/vue.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
